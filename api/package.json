@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./modules/db_connect.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon api.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.6.2",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.3.2"
+  }
+}

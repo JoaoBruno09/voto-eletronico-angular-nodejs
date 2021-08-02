@@ -1,0 +1,739 @@
+<div class="container">
+  <div style="padding-top: 10px" class="row">
+    <div class="col-2">
+      <div class="float-start">
+        <button
+          type="button"
+          style="display: inline-flex"
+          class="no-btn-user dropdown-toggle"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <fa-icon class="icon-class-user" [icon]="faUser"></fa-icon
+          ><a
+            style="text-decoration: none"
+            type="button"
+            class="
+              d-none d-sm-none d-md-none d-lg-none d-xl-block
+              tittle-top-bar-user
+            "
+            >&nbsp;&nbsp;
+            {{ user.user_name }}
+          </a>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li>
+            <button
+              class="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#modal_change_password"
+            >
+              <fa-icon [icon]="faKey"></fa-icon>&nbsp;&nbsp;Alterar Password
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="d-flex justify-content-center">
+        <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
+          <li class="nav-item tittle-top-bar-user" role="presentation">
+            <button
+              class="nav-link btn-user-tab active"
+              id="available-events"
+              data-bs-toggle="tab"
+              data-bs-target="#available-events-tab"
+              type="button"
+              role="tab"
+              aria-controls="available-events"
+              aria-selected="true"
+            >
+              <fa-icon
+                class="icon-class-user"
+                [icon]="faCalendarCheck"
+              ></fa-icon
+              ><a
+                style="text-decoration: none"
+                type="button"
+                class="
+                  d-none d-sm-none d-md-none d-lg-none d-xl-block
+                  tittle-top-bar-user
+                "
+                >&nbsp;&nbsp;Eventos Disponiveis</a
+              >
+            </button>
+          </li>
+          <li class="nav-item tittle-top-bar-user" role="presentation">
+            <button
+              class="nav-link btn-user-tab"
+              id="next-events"
+              data-bs-toggle="tab"
+              data-bs-target="#next-events-tab"
+              type="button"
+              role="tab"
+              aria-controls="next-events"
+              aria-selected="false"
+            >
+              <fa-icon
+                class="icon-class-user"
+                [icon]="faCalendarMinus"
+              ></fa-icon
+              ><a
+                style="text-decoration: none"
+                type="button"
+                class="
+                  d-none d-sm-none d-md-none d-lg-none d-xl-block
+                  tittle-top-bar-user
+                "
+                >&nbsp;&nbsp;Próximos Eventos</a
+              >
+            </button>
+          </li>
+          <li class="nav-item tittle-top-bar-user" role="presentation">
+            <button
+              class="nav-link btn-user-tab"
+              id="historic-events"
+              data-bs-toggle="tab"
+              data-bs-target="#historic-events-tab"
+              type="button"
+              role="tab"
+              aria-controls="historic-events"
+              aria-selected="false"
+            >
+              <fa-icon
+                class="icon-class-user"
+                [icon]="faCalendarTimes"
+              ></fa-icon
+              ><a
+                style="text-decoration: none"
+                type="button"
+                class="
+                  d-none d-sm-none d-md-none d-lg-none d-xl-block
+                  tittle-top-bar-user
+                "
+                >&nbsp;&nbsp;Histórico de Eventos</a
+              >
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="float-end">
+        <button
+          type="button"
+          style="display: inline-flex"
+          class="no-btn-user"
+          (click)="logout()"
+        >
+          <fa-icon class="icon-class-user" [icon]="faPowerOff"></fa-icon
+          ><a
+            style="text-decoration: none"
+            type="button"
+            class="
+              d-none d-sm-none d-md-none d-lg-none d-xl-block
+              tittle-top-bar-user
+            "
+            >&nbsp;&nbsp;Sair da Conta</a
+          >
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="tab-content" id="myTabContent0">
+    <div
+      class="tab-pane fade show active"
+      id="available-events-tab"
+      role="tabpanel"
+      aria-labelledby="home-tab0"
+    >
+      <div class="pad-div-tabs" id="eventos_disponiveis">
+        <div class="row pad-div-tabs">
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <p>Eventos disponiveis para votar:</p>
+          </div>
+          <div class="col-md-5 col-lg-4 col-xl-3">
+            <div class="input-group">
+              <div class="input-group-text searchbar">
+                <fa-icon [icon]="faSearch"></fa-icon>
+              </div>
+              <input
+                (keydown)="searchBarChange(availableEventSearch)"
+                (keyup)="searchBarChange(availableEventSearch)"
+                [(ngModel)]="availableEventSearch"
+                class="form-control searchbartext"
+                type="search"
+                placeholder="Insira o nome do evento.."
+                aria-label="Search"
+                name="availableEventSearch"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+          <div
+            *ngIf="availableEventSearch != '' && event_searched_exist != true"
+            class="alert alert-danger"
+            role="alert"
+          >
+            Não existem resultados para '{{ availableEventSearch }}'
+          </div>
+          <div *ngFor="let evento of eventos">
+            <li
+              *ngIf="
+                availableEventSearch == '' ||
+                doSearchBar(evento.event_title, availableEventSearch)
+              "
+              class="
+                list-group-item list-group-item-action
+                mb-3
+                list-events_user
+              "
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 text-user">
+                  {{ evento.event_title }}
+                </h5>
+              </div>
+              <div class="row">
+                <div class="col-lg-8">
+                  <ng-container
+                    *ngIf="
+                      evento.event_description != null;
+                      else elseTemplateDescription
+                    "
+                  >
+                    <p class="mb-1">{{ evento.event_description }}</p>
+                  </ng-container>
+                  <ng-template #elseTemplateDescription>
+                    <p class="mb-1">Sem Descrição.</p>
+                  </ng-template>
+                </div>
+                <div class="col-lg-4">
+                  <ng-container
+                    *ngIf="verifyVotes(evento.event_id); else elseTemplate"
+                  >
+                    <h4 class="float-end" style="color: green">
+                      Já votou neste evento
+                    </h4>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <button
+                      type="button"
+                      class="btn btn-first float-end"
+                      title="Votar"
+                      (click)="getCandidatesEvent(evento.event_id)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal_vote"
+                    >
+                      <fa-icon [icon]="faVoteYea"></fa-icon>&nbsp;&nbsp;Votar
+                    </button>
+                  </ng-template>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="next-events-tab"
+      role="tabpanel"
+      aria-labelledby="profile-tab0"
+    >
+      <div class="pad-div-tabs" id="próximos_eventos">
+        <div class="row pad-div-tabs">
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <p>Próximos Eventos:</p>
+          </div>
+          <div class="col-md-5 col-lg-4 col-xl-3">
+            <div class="input-group">
+              <div class="input-group-text searchbar">
+                <fa-icon [icon]="faSearch"></fa-icon>
+              </div>
+              <input
+                (keydown)="searchBarNextChange(nextEventSearch)"
+                (keyup)="searchBarNextChange(nextEventSearch)"
+                [(ngModel)]="nextEventSearch"
+                class="form-control searchbartext"
+                type="search"
+                placeholder="Insira o nome do evento.."
+                aria-label="Search"
+                name="nextEventSearch"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+          <div
+            *ngIf="nextEventSearch != '' && event_searched_exist != true"
+            class="alert alert-danger"
+            role="alert"
+          >
+            Não existem resultados para '{{ nextEventSearch }}'
+          </div>
+          <div *ngFor="let nevento of next_eventos">
+            <li
+              *ngIf="
+                nextEventSearch == '' ||
+                doSearchBar(nevento.event_title, nextEventSearch)
+              "
+              class="
+                list-group-item list-group-item-action
+                mb-3
+                list-events_user
+              "
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 text-user">
+                  {{ nevento.event_title }}
+                </h5>
+              </div>
+              <div class="row">
+                <div class="col-lg-8">
+                  <ng-container
+                    *ngIf="
+                      nevento.event_description != null;
+                      else elseTemplateDescription
+                    "
+                  >
+                    <p class="mb-1">{{ nevento.event_description }}</p>
+                  </ng-container>
+                  <ng-template #elseTemplateDescription>
+                    <p class="mb-1">Sem Descrição.</p>
+                  </ng-template>
+                </div>
+                <div class="col-lg-4">
+                  <h5 class="float-end" style="color: #d8a30c">
+                    Ainda não é possivel votar neste evento
+                  </h5>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="historic-events-tab"
+      role="tabpanel"
+      aria-labelledby="contact-tab0"
+    >
+      <div class="pad-div-tabs" id="historico_eventos">
+        <div class="row pad-div-tabs">
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <p>Eventos passados:</p>
+          </div>
+          <div class="col-md-5 col-lg-4 col-xl-3">
+            <div class="input-group">
+              <div class="input-group-text searchbar">
+                <fa-icon [icon]="faSearch"></fa-icon>
+              </div>
+              <input
+                (keydown)="searchBarPastChange(pastEventSearch)"
+                (keyup)="searchBarPastChange(pastEventSearch)"
+                [(ngModel)]="pastEventSearch"
+                class="form-control searchbartext"
+                type="search"
+                placeholder="Insira o nome do evento.."
+                aria-label="Search"
+                name="pastEventSearch"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+          <div
+            *ngIf="pastEventSearch != '' && event_searched_exist != true"
+            class="alert alert-danger"
+            role="alert"
+          >
+            Não existem resultados para '{{ pastEventSearch }}'
+          </div>
+          <div *ngFor="let pevento of past_eventos">
+            <li
+              *ngIf="
+                pastEventSearch == '' ||
+                doSearchBar(pevento.event_title, pastEventSearch)
+              "
+              class="
+                list-group-item list-group-item-action
+                mb-3
+                list-events_user
+              "
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 text-user">
+                  {{ pevento.event_title }}
+                </h5>
+              </div>
+              <div class="row">
+                <div class="col-lg-8">
+                  <ng-container
+                    *ngIf="
+                      pevento.event_description != null;
+                      else elseTemplateDescription
+                    "
+                  >
+                    <p class="mb-1">{{ pevento.event_description }}</p>
+                  </ng-container>
+                  <ng-template #elseTemplateDescription>
+                    <p class="mb-1">Sem Descrição.</p>
+                  </ng-template>
+                </div>
+                <div class="col-lg-4">
+                  <button
+                    class="btn btn-first float-end"
+                    id="btn_see_events"
+                    title="Ver Resultados"
+                    (click)="see_results_event(pevento.event_id)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal_results"
+                  >
+                    <fa-icon [icon]="faPoll"></fa-icon>&nbsp;&nbsp;Ver
+                    Resultados
+                  </button>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Alterar Password -->
+<div
+  class="modal fade"
+  id="modal_change_password"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alterar Password</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="col-form-label">Password Atual:</label>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <input
+                [(ngModel)]="user_password"
+                type="password"
+                class="form-control"
+                id="user_password"
+                [disabled]="user_password_verified == true"
+              />
+              <span *ngIf="user_password == ''" class="helper-error"
+                >*Necessita de introduzir a password atual</span
+              >
+              <span
+                class="helper-error"
+                id="helper-error-change-user-password"
+              ></span>
+              <span
+                class="helper-success"
+                id="helper-success-change-user-password"
+              ></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-9">
+              <button
+                type="button"
+                id="btn-verify-user-password"
+                class="btn btn-first"
+                (click)="verify_user_password()"
+                [disabled]="user_password_verified == true"
+              >
+                <fa-icon [icon]="faCheckCircle"></fa-icon>&nbsp;&nbsp;Verificar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="col-form-label">Nova password:</label>
+          <input
+            [(ngModel)]="user_new_password"
+            type="password"
+            class="form-control"
+            id="user_new_password"
+            [disabled]="user_password_verified == false"
+            (keydown)="step_progress_bar_change_user_pw()"
+            (keyup)="step_progress_bar_change_user_pw()"
+            data-bs-toggle="popover_pw"
+            data-bs-content="No minimo 8 caracteres, uma letra minúscula, uma maiúscula, um número e um caractere especial."
+          />
+          <span
+            class="helper-error"
+            *ngIf="user_new_password == '' && user_password_verified == true"
+            >*A nova password é obrigatória.</span
+          >
+          <span
+            class="helper-error"
+            *ngIf="
+              user_new_password != '' &&
+              user_new_password_strength < 3 &&
+              user_password_verified == true
+            "
+            >*A força da password necessita de ser pelo menos 60%</span
+          >
+          <br
+            *ngIf="
+              user_new_password != '' &&
+              user_new_password_strength < 3 &&
+              user_password_verified == true
+            "
+          />
+          <span
+            class="helper-error"
+            *ngIf="
+              user_new_password != '' &&
+              user_new_password.length < 8 &&
+              user_password_verified == true
+            "
+            >*A password necessita de ter pelo menos 8 caracteres</span
+          >
+          <div class="progress mb-3">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              id="progress-pw"
+              [style.width.%]="widthVal"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              15%
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="col-form-label">Confirmar nova password:</label>
+          <input
+            type="password"
+            class="form-control"
+            [(ngModel)]="user_confirm_new_password"
+            id="user_confirm_new_password"
+            [disabled]="user_password_verified == false"
+          />
+          <span
+            class="helper-error"
+            *ngIf="
+              user_confirm_new_password != user_new_password &&
+              user_password_verified == true
+            "
+            >*As passwords não coincidem.</span
+          >
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          style="font-size: 20px"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;&nbsp;Fechar
+        </button>
+        <button
+          style="width: 41%"
+          type="button"
+          id="btn-change-user-password"
+          class="btn btn-first"
+          (click)="change_password()"
+          [disabled]="user_password_verified == false"
+        >
+          <fa-icon [icon]="faUserEdit"></fa-icon>&nbsp;&nbsp;Alterar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Voto -->
+<div
+  class="modal fade"
+  id="modal_vote"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Escolha o seu candidato preferido
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="form-check" *ngFor="let candidate of candidates">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="candidate_voted"
+                  [(ngModel)]="candidate_voted"
+                  id="flexRadioDefault1"
+                  value="{{ candidate.candidate_id }}"
+                />
+                <label
+                  *ngIf="candidate.candidate_name != ''"
+                  class="form-check-label"
+                >
+                  {{ candidate.candidate_name }}
+                </label>
+                <label
+                  *ngIf="candidate.candidate_name == null"
+                  class="form-check-label"
+                >
+                  {{ candidate.candidate_entourage }}
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="candidate_voted"
+                  [(ngModel)]="candidate_voted"
+                  id="flexRadioDefault1"
+                  value="0"
+                />
+                <label class="form-check-label"> Voto em Branco </label>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="candidate_voted == null">
+            <span class="helper-error"
+              >*Necessita de escolher um candidato</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="close_modal"
+          type="button"
+          style="font-size: 20px"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;&nbsp;Fechar
+        </button>
+        <button
+          (click)="saveVote($event)"
+          type="button"
+          style="width: 41%"
+          id="btn-change-user-password"
+          class="btn btn-success btn-success-first"
+        >
+          <fa-icon [icon]="faCheckSquare"></fa-icon>&nbsp;&nbsp;Votar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Resultados -->
+<div
+  class="modal fade"
+  id="modal_results"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Resultados do Evento</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Candidato</th>
+                    <th scope="col">Nº Votos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let result of results">
+                    <td *ngIf="result.candidate_name != null">
+                      {{ result.candidate_name }}
+                    </td>
+                    <td
+                      *ngIf="
+                        result.candidate_name == null &&
+                        result.candidate_entourage != null
+                      "
+                    >
+                      {{ result.candidate_entourage }}
+                    </td>
+                    <td
+                      *ngIf="
+                        result.candidate_name == null &&
+                        result.candidate_entourage == null
+                      "
+                    >
+                      Votos em Branco
+                    </td>
+                    <td>{{ result.n_votos }}</td>
+                  </tr>
+                  <tr>
+                    <td>Votos Nulos</td>
+                    <td>{{ null_votes }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="close_modal"
+          type="button"
+          style="font-size: 20px"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          <fa-icon [icon]="faTimesCircle"></fa-icon>&nbsp;&nbsp;Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
